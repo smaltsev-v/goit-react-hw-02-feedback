@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { Component, Fragment } from "react";
 import Control from './components/Control';
-
-
-class App extends React.Component {
+import Statistics from './components/Statistics';
+import Section from "./components/Section";
+class App extends Component {
   
   state = {
     good: 0,
@@ -11,37 +11,56 @@ class App extends React.Component {
   };
 
   btnClickFeedback = (e) => {
-    const nameBtn = e.currentTarget.name;
+    const nameKey = e.currentTarget.name;
     this.setState((prevState) => {
       return {
-        [nameBtn]: prevState[nameBtn] + 1,
+        [nameKey]: prevState[nameKey] + 1,
       };
     });
    };
-    
+    countTotalFeedback = () => {
+    const { good, neutral, bad } = this.state;
+    const total = good + neutral + bad;
+
+    return total;
+  };
+
+  countPositiveFeedbackPercentage = () => {
+    const { good } = this.state;
+    const totalFeedback = this.countTotalFeedback();
+    const positiveFeedback = Math.round((good / totalFeedback) * 100);
+
+    return positiveFeedback ? positiveFeedback : 0
+  };
+  
 
 
 
-  render() { 
+render() {
+    const { good, neutral, bad } = this.state;
+    const totalFeedback = this.countTotalFeedback();
+    const positiveFeedbackPercentage =
+      this.countPositiveFeedbackPercentage() + "% ";
+
     return (
-      <div>
-        <h1>Please leave feedback</h1>
-        <div>
+      <Fragment>
+        <Section title="Please leave feedback">
           <Control
             options={this.state}
-            onLeaveFeedback={this.btnClickHandler}
+            onLeaveFeedback={this.btnClickFeedback}
           />
-        </div>
-        <div>
-          <h2> Statistics </h2>
-          <ul>
-            <li>Good</li>
-            <li>Neutral</li>
-            <li>Bad</li>
-          </ul>
-        </div>
-      </div>
+        </Section>
+        <Section title="Statistics">
+          <Statistics
+            good={good}
+            neutral={neutral}
+            bad={bad}
+            total={totalFeedback}
+            positivePercentage={positiveFeedbackPercentage}
+          />
+        </Section>
+      </Fragment>
     );
-  };
+  }
  };
 export default App;
