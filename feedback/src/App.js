@@ -1,7 +1,12 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import Control from './components/Control';
 import Statistics from './components/Statistics';
 import Section from "./components/Section";
+import './App.css'
+
+
+
+
 class App extends Component {
   
   state = {
@@ -43,14 +48,13 @@ render() {
       this.countPositiveFeedbackPercentage() + "% ";
 
     return (
-      <Fragment>
-        <Section title="Please leave feedback">
+      <div className="App">
+        <Section title="Please leave feedback:">
           <Control
             options={this.state}
             onLeaveFeedback={this.btnClickFeedback}
           />
-        </Section>
-        <Section title="Statistics">
+          <h1>Statistics:</h1>
           <Statistics
             good={good}
             neutral={neutral}
@@ -59,7 +63,7 @@ render() {
             positivePercentage={positiveFeedbackPercentage}
           />
         </Section>
-      </Fragment>
+      </div>
     );
   }
  };
